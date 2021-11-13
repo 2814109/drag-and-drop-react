@@ -1,4 +1,4 @@
-import React, { VFC, useEffect, useRef, useState } from "react";
+import React, { VFC, useRef, useState } from "react";
 import "./index.css";
 
 const DragComponents: VFC = () => {
