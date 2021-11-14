@@ -6,21 +6,22 @@ const DragComponents: VFC = () => {
   const beNamedList = list.map((_, index) => `Contents${index}`);
   const [dragList, setDragList] = useState<string[]>(beNamedList);
   type PositonObject = {
-    name: string;
+    primaryKey: string | null;
   };
   const DraggingObjectState = useRef<PositonObject>({
-    name: "",
+    primaryKey: null,
   });
   const beDragedObjectState = useRef<PositonObject>({
-    name: "",
+    primaryKey: null,
   });
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
-    beDragedObjectState.current.name = event.currentTarget.innerHTML;
+    beDragedObjectState.current.primaryKey =
+      event.currentTarget.getAttribute("primary-key");
   };
-
   const handleDragStart = (event: React.DragEvent) => {
-    DraggingObjectState.current.name = event.currentTarget.innerHTML;
+    DraggingObjectState.current.primaryKey =
+      event.currentTarget.getAttribute("primary-key");
   };
 
   const replaceArrayElements = (
@@ -42,16 +43,20 @@ const DragComponents: VFC = () => {
   };
 
   const handleDrop = (event: React.DragEvent) => {
-    const hoveredElementName: string = event.currentTarget.innerHTML;
-    const draggingElementName: string = DraggingObjectState.current.name;
+    const hoveredElementPrimaryKey: string | null =
+      event.currentTarget.getAttribute("primary-key");
+    const draggingElementPrimaryKey: string | null =
+      DraggingObjectState.current.primaryKey;
     const hoveredElementIndex: number = dragList.findIndex(
-      (element: string) => {
-        return element == hoveredElementName;
+      (_: string, index: number) => {
+        return index == Number(hoveredElementPrimaryKey);
       }
     );
-    const draggingElementIndex = dragList.findIndex((element: string) => {
-      return element == draggingElementName;
-    });
+    const draggingElementIndex = dragList.findIndex(
+      (_: string, index: number) => {
+        return index == Number(draggingElementPrimaryKey);
+      }
+    );
     const replaceList = replaceArrayElements(
       dragList,
       hoveredElementIndex,
@@ -64,6 +69,7 @@ const DragComponents: VFC = () => {
       {dragList.map((name, index) => {
         return (
           <div
+            primary-key={index}
             className="DragItem"
             key={index}
             draggable={true}
