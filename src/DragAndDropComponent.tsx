@@ -26,16 +26,16 @@ const DragComponents: VFC = () => {
 
   const replaceArrayElements = (
     array: string[],
-    targetIndex: number,
-    sourceIndex: number
+    replaceIndex: number,
+    beReplacedIndex: number
   ) => {
     return array.reduce(
-      (resultArray: string[], element, id, originalArray) => [
+      (resultArray: string[], element, index, originalArray) => [
         ...resultArray,
-        id === targetIndex
-          ? originalArray[sourceIndex]
-          : id === sourceIndex
-          ? originalArray[targetIndex]
+        index === replaceIndex
+          ? originalArray[beReplacedIndex]
+          : index === beReplacedIndex
+          ? originalArray[replaceIndex]
           : element,
       ],
       []
