@@ -5,7 +5,7 @@ const DragComponents: VFC = () => {
   const list = [...Array(10)];
   const beNamedList = list.map((_, index) => {
     return { id: index, contentName: `Contents${index}` };
-  }, []);
+  });
   type ContentType = {
     id: number;
     contentName: string;
