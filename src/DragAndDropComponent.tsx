@@ -73,7 +73,7 @@ const DragComponents: VFC = () => {
   };
   return (
     <>
-      {dragList.map((contentObject, index) => {
+      {dragList.map((contentObject) => {
         return (
           <div
             primary-key={contentObject.id}
