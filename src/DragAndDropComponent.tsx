@@ -3,8 +3,15 @@ import "./index.css";
 
 const DragComponents: VFC = () => {
   const list = [...Array(10)];
-  const beNamedList = list.map((_, index) => `Contents${index}`);
-  const [dragList, setDragList] = useState<string[]>(beNamedList);
+  const beNamedList = list.map((_, index) => {
+    return { id: index, contentName: `Contents${index}` };
+  }, []);
+  type ContentType = {
+    id: number;
+    contentName: string;
+  };
+
+  const [dragList, setDragList] = useState<ContentType[]>(beNamedList);
   type PositonObject = {
     primaryKey: string | null;
   };
@@ -25,12 +32,12 @@ const DragComponents: VFC = () => {
   };
 
   const replaceArrayElements = (
-    array: string[],
+    array: ContentType[],
     replaceIndex: number,
     beReplacedIndex: number
   ) => {
     return array.reduce(
-      (resultArray: string[], element, index, originalArray) => [
+      (resultArray: ContentType[], element, index, originalArray) => [
         ...resultArray,
         index === replaceIndex
           ? originalArray[beReplacedIndex]
@@ -48,13 +55,13 @@ const DragComponents: VFC = () => {
     const draggingElementPrimaryKey: string | null =
       DraggingObjectState.current.primaryKey;
     const hoveredElementIndex: number = dragList.findIndex(
-      (_: string, index: number) => {
-        return index == Number(hoveredElementPrimaryKey);
+      (contentObject: ContentType) => {
+        return contentObject.id == Number(hoveredElementPrimaryKey);
       }
     );
     const draggingElementIndex = dragList.findIndex(
-      (_: string, index: number) => {
-        return index == Number(draggingElementPrimaryKey);
+      (contentObject: ContentType) => {
+        return contentObject.id == Number(draggingElementPrimaryKey);
       }
     );
     const replaceList = replaceArrayElements(
@@ -66,18 +73,18 @@ const DragComponents: VFC = () => {
   };
   return (
     <>
-      {dragList.map((name, index) => {
+      {dragList.map((contentObject, index) => {
         return (
           <div
-            primary-key={index}
+            primary-key={contentObject.id}
             className="DragItem"
-            key={index}
+            key={contentObject.id}
             draggable={true}
             onDrop={handleDrop}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
           >
-            {name}
+            {contentObject.contentName}
           </div>
         );
       })}
